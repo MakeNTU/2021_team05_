@@ -1,4 +1,4 @@
-# WakeNTU
+# 滑軌照明投影模組
 Example repository for 2021 MakeNTU submission
 
 ## 組別資訊
