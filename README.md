@@ -14,7 +14,7 @@ Example repository for 2021 MakeNTU submission
          滑軌型移動照明裝置使工作者可以調整燈光的位置及角度。
          避免自身身體及物品擋住光線的麻煩。
  <br>
-DEMO影片連結：
+DEMO影片連結：https://drive.google.com/drive/folders/1g9sl4n4evX0dCSSXtbD44QPTkGA7fKTp
 
 ### 運作方式
 這次的作品為了因應便利生活，提升工作環境水平的關係，設計一
