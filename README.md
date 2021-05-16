@@ -12,7 +12,7 @@ Example repository for 2021 MakeNTU submission
 作品名稱：滑軌照明投影模組 <br>
 作品用途：此作品旨在強調提升居家工作、居家生活的便利性。
          滑軌型移動照明裝置使工作者可以調整燈光的位置及角度。
-         避免自身身體及物品擋住光線的麻煩。此滑軌模組也可以將裝其他的小裝置，如投影機、攝影機等，使居家生活與居家工作更加便利。
+         避免自身身體及物品擋住光線的麻煩。此滑軌模組也可以輕易的加裝其他的小裝置，如投影機、攝影機等，使居家生活與居家工作更加便利。
  <br>
 DEMO影片連結：https://drive.google.com/drive/folders/1g9sl4n4evX0dCSSXtbD44QPTkGA7fKTp
 
