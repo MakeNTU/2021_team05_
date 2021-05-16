@@ -11,7 +11,7 @@ Example repository for 2021 MakeNTU submission
 ## 作品介紹
 作品名稱：WakeNTU <br>
 作品用途：When you feel sleepy, the device decides whether you should go to sleep or cheer up. <br>
-DEMO影片連結：
+DEMO影片連結：https://drive.google.com/drive/folders/1g9sl4n4evX0dCSSXtbD44QPTkGA7fKTp
 
 ### 運作方式
 The device tracks your heart rate, and learns about your activity. <br>
