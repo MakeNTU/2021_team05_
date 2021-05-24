@@ -1,0 +1,223 @@
+package com.example.mkntu;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Switch;
+import java.io.OutputStream;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
+import java.util.UUID;
+
+
+
+public class MainActivity extends AppCompatActivity {
+
+    public static OutputStream op = null;
+
+
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //region view objects
+
+        Switch  power       = findViewById(R.id.power);
+        SeekBar bright_bar  = findViewById(R.id.bright_bar);
+        Button  go_left     = findViewById(R.id.go_left);
+        Button  go_right    = findViewById(R.id.go_right);
+        Button  turn_up     = findViewById(R.id.turn_up);
+        Button  turn_down   = findViewById(R.id.turn_down);
+        //endregion
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //region Bluetooth connection
+
+        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+        Set<BluetoothDevice> srcDevices = btAdapter.getBondedDevices();
+        BluetoothSocket btSocket = null;
+
+        //create Socket
+        for(BluetoothDevice it : srcDevices){
+            Log.e("found",it.getName());
+
+            boolean found = false;
+
+            if(it.getName().equals("LTC4736")){
+                Log.e("Success","found LTC4736");
+
+                UUID uuid = it.getUuids()[0].getUuid();
+                try{
+                    btSocket = it.createRfcommSocketToServiceRecord(uuid);
+                }catch (IOException e) { }
+
+                Log.e("Success",uuid.toString());
+                found = true;
+            }
+
+            if(found) {
+                btAdapter.cancelDiscovery();
+                break;
+            }
+        }
+
+        //connect Socket
+        
+        try {
+            btSocket.connect();
+        } catch (IOException connectException) {
+            Log.e("Fail connect", connectException.getMessage());
+        }
+           
+
+        if(btSocket.isConnected()) Log.e("Success","socket connect");
+
+
+        //endregion
+
+        //region SET OUTPUT STREAM
+
+
+        try{
+            op = btSocket.getOutputStream();
+        }catch (IOException e){
+            Log.e("FAIL","op");
+        }
+
+        //endregion
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //region POWER
+
+        power.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(power.isChecked()){
+                    String cmd = "a";
+                    try{op.write(cmd.getBytes());}catch (IOException e){ }
+                }
+                else{
+                    String cmd = "b";
+                    try{op.write(cmd.getBytes());}catch (IOException e){ }
+                }
+            }
+
+        });
+        //endregion
+
+        //region BRIGHT_BAR
+
+        bright_bar.setMax(99);
+
+        bright_bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                String cmd = "c";
+                try{op.write(cmd.getBytes());}catch (IOException e){ }
+                int value = bright_bar.getProgress();
+                int t = value/10;
+                try{op.write(Integer.toString(t).getBytes());}catch (IOException e){ }
+                t = value%10;
+                try{op.write(Integer.toString(t).getBytes());}catch (IOException e){ }
+            }
+        });
+
+        //endregion
+
+        go_left.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_DOWN){
+                    String cmd = "d";
+                    try{op.write(cmd.getBytes());}catch (IOException e){ }
+                }
+                if(event.getAction()== MotionEvent.ACTION_UP){
+                    String cmd = "s";
+                    try{op.write(cmd.getBytes());}catch (IOException e){ }
+                }
+                return false;
+            }
+        });
+
+        //region GO_RIGHT
+        go_right.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_DOWN){
+                    String cmd = "e";
+                    try{op.write(cmd.getBytes());}catch (IOException e){ }
+                }
+                if(event.getAction()== MotionEvent.ACTION_UP){
+                    String cmd = "s";
+                    try{op.write(cmd.getBytes());}catch (IOException e){ }
+                }
+                return false;
+            }
+        });
+
+        //endregion
+
+        //region TURN_UP
+
+        turn_up.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_DOWN){
+                    String cmd = "f";
+                    try{op.write(cmd.getBytes());}catch (IOException e){ }
+                }
+                if(event.getAction()== MotionEvent.ACTION_UP){
+                    String cmd = "s";
+                    try{op.write(cmd.getBytes());}catch (IOException e){ }
+                }
+                return false;
+            }
+        });
+
+        //endregion
+
+        //region TURN_DOWN
+
+        turn_down.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()==MotionEvent.ACTION_DOWN){
+                    String cmd = "g";
+                    try{op.write(cmd.getBytes());}catch (IOException e){ }
+                }
+                if(event.getAction()== MotionEvent.ACTION_UP){
+                    String cmd = "s";
+                    try{op.write(cmd.getBytes());}catch (IOException e){ }
+                }
+                return false;
+            }
+        });
+
+        //endregion
+
+    }
+}
